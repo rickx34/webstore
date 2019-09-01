@@ -1,0 +1,31 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "A system of listing products and adding then to car",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rickx34/rickandmorty-store.git"
+  },
+  "author": "Ricky Dua",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rickx34/rickandmorty-store/issues"
+  },
+  "homepage": "https://github.com/rickx34/rickandmorty-store#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^7.12.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.17.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "jest": "^24.9.0"
+  }
+}
