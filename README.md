@@ -1,1 +1,1 @@
-# rickandmorty-store
+# webstore

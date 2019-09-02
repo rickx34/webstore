@@ -9,28 +9,28 @@ Product.hasMany(Cart);
 Product.sync({ force: true }).then(() => {
   console.log('table created');
   Product.create({
-    name: 'portal gun',
-    price: '123.89',
+    name: 'Sledgehammer',
+    price: 125.76,
   });
 
   Product.create({
-    name: 'mr meeseeks box',
-    price: '500.99',
+    name: 'Axe',
+    price: 190.51,
   });
 
   Product.create({
-    name: 'pickle rick',
-    price: '200.85',
+    name: 'Bandsaw',
+    price: 562.14,
   });
 
   Product.create({
-    name: 'laser gun',
-    price: '54.32',
+    name: 'Chisel',
+    price: 13.9,
   });
 
   Product.create({
-    name: 'robot talking dog',
-    price: '65.12',
+    name: 'Hacksaw',
+    price: 19.45,
   });
 
   Cart.sync({ force: true }).then(() => {
