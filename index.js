@@ -1,6 +1,7 @@
 const express = require('express');
 const { Product, Cart } = require('./app/models');
-const { aggregateFunction, sequelize } = require('./app/db');
+const { aggregateFunction } = require('./app/db');
+const { roundOff2DP } = require('./app/middlewares/express');
 
 const app = express();
 const port = 3000;
@@ -23,7 +24,7 @@ app.get('/products', async (req, res) => {
 });
 
 // Cart API
-app.get('/cart/products', async (req, res) => {
+app.get('/cart/products', async (req, res, next) => {
   // required: true performs a inner join
   const allProductsUnderCart = await Product.findAll({
     include: [{ model: Cart, required: true, attributes: [] }],
@@ -31,9 +32,8 @@ app.get('/cart/products', async (req, res) => {
       ['id', 'productId'],
       'name',
       'price',
-      // explicit cast is required on postgres
-      [sequelize.cast(aggregateFunction('COUNT', 'productId'), 'int'), 'quantity'],
-      [sequelize.cast(aggregateFunction('SUM', 'price'), 'float'), 'total'],
+      [aggregateFunction('COUNT', 'productId'), 'quantity'],
+      [aggregateFunction('SUM', 'price'), 'total'],
     ],
     group: ['name', 'price', 'product.id'],
   }).catch((error) => {
@@ -67,7 +67,7 @@ app.get('/cart/products', async (req, res) => {
   res.json({
     products: allProductsUnderCart,
     // rounding to 2dp output
-    overallTotal: parseFloat(overallTotal.toFixed(2)),
+    overallTotal,
     links,
   });
 });
@@ -100,6 +100,5 @@ app.delete('/cart/products/:productId', async (req, res) => {
 
   res.json(undefined);
 });
-
 
 app.listen(port, () => console.log(`listening on port ${port}!`));

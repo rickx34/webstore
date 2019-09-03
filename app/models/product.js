@@ -10,11 +10,7 @@ const Product = sequelize.define('product', {
     },
   },
   price: {
-    type: Sequelize.DECIMAL(10, 2),
-    get() {
-      // Workaround until sequelize issue #8019 is fixed
-      return parseFloat(this.getDataValue('price'));
-    },
+    type: Sequelize.FLOAT(9, 2),
     allowNull: false,
     validate: {
       min: 0,
