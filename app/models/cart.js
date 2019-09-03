@@ -14,6 +14,8 @@ const Cart = sequelize.define('cart', {
     },
   },
 },
+// Reason for this index becuase on delete sequelize issues a
+// sql query with '...WHERE "productId" = '\d''
 { indexes: [{ name: 'product_id_index', fields: ['productId'] }] });
 
 module.exports = { Cart };

@@ -1,7 +1,7 @@
 const express = require('express');
 const { Product, Cart } = require('./app/models');
 const { aggregateFunction } = require('./app/db');
-const { roundOff2DP } = require('./app/middlewares/express');
+const { roundOff } = require('./app/middlewares');
 
 const app = express();
 const port = 3000;
@@ -10,6 +10,7 @@ const send500Http = (message, response) => {
   response.status(500);
   response.json({ message });
 };
+
 
 // Products API
 app.get('/products', async (req, res) => {
@@ -23,6 +24,7 @@ app.get('/products', async (req, res) => {
   res.json(allProducts);
 });
 
+
 // Cart API
 app.get('/cart/products', async (req, res, next) => {
   // required: true performs a inner join
@@ -33,7 +35,7 @@ app.get('/cart/products', async (req, res, next) => {
       'name',
       'price',
       [aggregateFunction('COUNT', 'productId'), 'quantity'],
-      [aggregateFunction('SUM', 'price'), 'total'],
+      [aggregateFunction('SUM', 'price'), 'total'], // Already handles rounding off to 2dp
     ],
     group: ['name', 'price', 'product.id'],
   }).catch((error) => {
@@ -64,13 +66,16 @@ app.get('/cart/products', async (req, res, next) => {
     },
   ];
 
-  res.json({
-    products: allProductsUnderCart,
-    // rounding to 2dp output
-    overallTotal,
-    links,
-  });
-});
+  // It is recommended you explicitly add keys to locals
+  // instead of setting locals as a whole
+  res.locals.products = allProductsUnderCart;
+  res.locals.overallTotal = overallTotal;
+  res.locals.links = links;
+
+  // go to next middleware and make sure that the
+  // response contains 2dp rounded off floats.
+  next();
+}, roundOff);
 
 app.post('/cart/products/:productId', async (req, res) => {
   const { productId } = req.params;
