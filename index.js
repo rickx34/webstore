@@ -17,6 +17,17 @@ app.get('/', async (req, res) => {
   res.sendFile(path.join(`${__dirname}/index.html`));
 });
 
+// For demo
+app.get('/apidocs', async (req, res) => {
+  res.sendFile(path.join(`${__dirname}/swagger.html`));
+});
+
+// For demo
+app.get('/openapi', async (req, res) => {
+  res.sendFile(path.join(`${__dirname}/openapi.yaml`));
+});
+
+
 // Products API
 app.get('/products', async (req, res) => {
   const allProducts = await Product.findAll({
@@ -93,6 +104,7 @@ app.post('/cart/products/:productId', async (req, res) => {
         res.status(404);
         res.json({ message: 'Product does not exist' });
       }
+
       send500Http('Error posting products under cart', res);
     });
 

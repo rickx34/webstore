@@ -70,6 +70,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/GetProductsUnderCartModel'
+  '/cart/products/{productId}':
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
     post:
       tags:
         - cart
