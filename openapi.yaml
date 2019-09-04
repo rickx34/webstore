@@ -1,0 +1,96 @@
+openapi: 3.0.1
+info:
+  version: '1'
+  title: Webstore API
+  description: 'All Webstore APIs'
+servers:
+  - url: 'http://localhost:3000'
+components:
+  schemas:
+    GetProductsUnderCartModel:
+      type: object
+      required:
+        - productId
+        - name
+        - price
+        - quantity
+        - total
+      properties:
+        productId:
+          type: number
+        name:
+          type: string
+        price:
+          type: number
+        quantity:
+          type: number
+        total:
+          type: number
+    GetProductsModel:
+      type: object
+      required:
+        - name
+        - price
+        - productId
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+        productId:
+          type: number
+paths:
+  '/products':
+    description: All operations on products
+    get:
+      tags:
+        - product
+      description: This operation will fetch all products in the system
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetProductsModel'
+  '/cart/products':
+    description: All operations on cart
+    get:
+      tags:
+        - cart
+      description: This operation will fetch all products under cart
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetProductsUnderCartModel'
+    post:
+      tags:
+        - cart
+      description: This operation will post a new product under cart
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  newCartItem:
+                    type: number
+                  productId:
+                    type: number
+    delete:
+      tags:
+        - cart
+      description: This operation will delete product under cart
+      responses:
+        '200':
+          description: 200 resposne
+          

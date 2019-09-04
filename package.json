@@ -1,7 +1,7 @@
 {
   "name": "test",
   "version": "1.0.0",
-  "description": "A system of listing products and adding then to car",
+  "description": "A system of listing products and adding then to cart",
   "main": "index.js",
   "scripts": {
     "test": "jest"

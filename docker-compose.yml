@@ -8,3 +8,11 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: example
+  swagger:
+    image: swaggerapi/swagger-ui
+    environment:
+      SWAGGER_JSON: /foo/openapi.yaml
+    volumes:
+      - ${PWD}:/foo
+    ports:
+      - 8080:8080

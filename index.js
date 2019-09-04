@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const { Product, Cart } = require('./app/models');
 const { aggregateFunction } = require('./app/db');
 const { roundOff } = require('./app/middlewares');
@@ -11,6 +12,10 @@ const send500Http = (message, response) => {
   response.json({ message });
 };
 
+// For demo
+app.get('/', async (req, res) => {
+  res.sendFile(path.join(`${__dirname}/index.html`));
+});
 
 // Products API
 app.get('/products', async (req, res) => {

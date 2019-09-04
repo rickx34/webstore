@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>WebStore</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        .custom-button {
+            margin: 10px
+        }
+        li {
+            margin: 10px
+        }
+    </style>
+</head>
+<script>
+    const addingListener = (id, method) => {
+        return () => {
+            fetch(`http://localhost:3000/cart/products/${id}`, { method })
+                .then((result) => {
+                    getCartItems();
+                })
+        }
+    }
+    var getCartItems = () => {
+        fetch('http://localhost:3000/cart/products',).then(data => data.json())
+                .then((result) => {
+                    const cartRoots = document.getElementById('cart-root');
+                    while (cartRoots.hasChildNodes()) {
+                        cartRoots.removeChild(cartRoots.lastChild)
+                    }
+
+                    if(result.products.length !== 0) {
+                        result.products.forEach((element) => {
+                            const li = document.createElement('li');
+
+                            const div1 = document.createElement('div');
+                            div1.textContent = `Name: ${element.name}`;
+                            
+                            const div2 = document.createElement('div');
+                            div2.textContent = `Price: \$${element.price}`;
+
+                            const div3 = document.createElement('div');
+                            div3.textContent = `Total: \$${element.total}`;
+
+                            const div4 = document.createElement('div');
+                            div4.textContent = `Quantity: ${element.quantity}`
+
+                            const button = document.createElement('button');
+                            button.textContent = 'Delete from Cart'
+                            button.addEventListener('click', addingListener(element.productId, 'DELETE'))
+
+
+                            li.appendChild(div1);
+                            li.appendChild(div2);
+                            li.appendChild(div3);
+                            li.appendChild(div4);
+                            li.appendChild(button);
+
+                            const rootCart = document.getElementById('cart-root');
+                            rootCart.appendChild(li);
+                        })
+                    }
+                    const overallTotal = result.overallTotal;
+                    const totalElement = document.getElementById('total');
+                    totalElement.textContent = `Total Overall: \$ ${overallTotal}`
+                })
+    }
+
+    fetch('http://localhost:3000/products').then((data) => data.json())
+        .then((products) => {
+
+            const productsRoot = document.getElementById('products-root');
+            products.forEach((product) => {
+                const li = document.createElement('li');
+                const div = document.createElement('div');
+                const button = document.createElement('button');
+
+                button.textContent = 'Add to Cart';
+                button.setAttribute('class', 'custom-button');
+                button.addEventListener('click', addingListener(product.productId, 'POST'))
+
+                div.textContent = `${product.name} \$${product.price}`;
+                div.appendChild(button);
+                li.appendChild(div);
+                productsRoot.appendChild(li);
+            })
+        })
+
+        getCartItems()
+
+</script>
+<body>
+    <h3>Products</h3>
+    <ul id="products-root">
+    </ul>
+
+    <h3>Cart Items</h3>
+    <ul id="cart-root">
+
+    </ul>
+    <div id="total"></div>
+</body>
+</html>
